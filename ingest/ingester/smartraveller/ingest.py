@@ -6,7 +6,7 @@ from lxml import html
 from ingester import get_country_code
 from ingester import insert_record
 
-def ingest():
+def ingest(table_name):
     """
         Large wrapping function to do the ingestion of country risk data from
         smart traveller.
@@ -34,6 +34,17 @@ def ingest():
 
         record['link'] = 'http://smartraveller.gov.au/' + country['FileRef'][1:]
 
+        raw_date_string = country['ArticleStartDate']
+
+        if raw_date_string is not None:
+
+            record['date'] = int(raw_date_string[6:-5])
+        else:
+
+            record['date'] = None
+
+        record['source'] = 'smartraveller.gov.au'
+
         risks = json.loads(country['Smartraveller_x0020_Advice_x0020_Levels'])
 
         risk_areas = []
@@ -60,4 +71,4 @@ def ingest():
 
             record['risk_regions'] = json.dumps(risk_areas)
 
-        print(record)
+        insert_record(table_name, record)
