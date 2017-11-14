@@ -3,7 +3,7 @@
 import sqlite3
 
 # Establish database connection
-test_db = True
+test_db = False
 
 DB_FILE = 'travel_risks.db'
 
@@ -53,7 +53,7 @@ def insert_record(table_name, record):
 
             valid_record = False
 
-            print('Missing ' + key + 'in parsed function argument')
+            print(record['name'] + ': Missing ' + key + ' in parsed function argument')
 
     if valid_record is True:
 

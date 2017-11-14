@@ -25,7 +25,6 @@ def ingest(table_name):
     countries = json.loads(javascript.text[60:-2])
 
     for country in countries:
-
         record = dict()
 
         record['name'] = country['Title']
@@ -37,10 +36,9 @@ def ingest(table_name):
         raw_date_string = country['ArticleStartDate']
 
         if raw_date_string is not None:
-
             record['date'] = int(raw_date_string[6:-5])
-        else:
 
+        else:
             record['date'] = None
 
         record['source'] = 'smartraveller.gov.au'
@@ -49,26 +47,25 @@ def ingest(table_name):
 
         risk_areas = []
 
-        count = 0
+        if len(risks['items']) > 0:
+            count = 0
 
-        for risk in risks['items']:
+            for risk in risks['items']:
+                if count < 1:
+                    if 'level' in risk:
+                        record['risk_level'] = risk['level']
+                    else:
+                        record['risk_level'] = None
+                else:
+                    risk_areas.append(risk)
 
-            if count < 1:
-
-                record['risk_level'] = risk['level']
-
-            else:
-
-                risk_areas.append(risk)
-
-            count = count + 1
+                count = count + 1
+        else:
+            record['risk_level'] = None
 
         if len(risk_areas) < 1:
-
             record['risk_regions'] = None
-
         else:
-
             record['risk_regions'] = json.dumps(risk_areas)
 
         insert_record(table_name, record)
