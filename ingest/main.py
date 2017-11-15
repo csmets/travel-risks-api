@@ -2,7 +2,7 @@
 
 import ingester
 
-table_name = 'test_table'
+table_name = 'travel_risks'
 
 ingester.create_table(table_name)
 

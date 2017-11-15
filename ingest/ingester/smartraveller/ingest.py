@@ -41,7 +41,7 @@ def ingest(table_name):
         else:
             record['date'] = None
 
-        record['source'] = 'smartraveller.gov.au'
+        record['source'] = 'smartraveller'
 
         risks = json.loads(country['Smartraveller_x0020_Advice_x0020_Levels'])
 
